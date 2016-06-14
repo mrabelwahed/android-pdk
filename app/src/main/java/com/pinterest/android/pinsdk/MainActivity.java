@@ -47,8 +47,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         scopes.add(PDKClient.PDKCLIENT_PERMISSION_WRITE_PUBLIC);
         scopes.add(PDKClient.PDKCLIENT_PERMISSION_READ_RELATIONSHIPS);
         scopes.add(PDKClient.PDKCLIENT_PERMISSION_WRITE_RELATIONSHIPS);
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_READ_PRIVATE);
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_WRITE_PRIVATE);
 
         pdkClient.login(this, scopes, new PDKCallback() {
             @Override
