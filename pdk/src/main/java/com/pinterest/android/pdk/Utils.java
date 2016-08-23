@@ -6,6 +6,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -70,5 +72,22 @@ public class Utils {
             url += paramString;
         }
         return url;
+    }
+
+    public static String sha1Hex(byte[] byteArray) {
+
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-1");
+        } catch (NoSuchAlgorithmException e) {
+            return "";
+        }
+        byte[] encoded = messageDigest.digest(byteArray);
+        StringBuilder builder = new StringBuilder();
+        for (byte b : encoded) {
+            builder.append(Integer.toHexString((b & 0xf0) >> 4));
+            builder.append(Integer.toHexString(b & 0x0f));
+        }
+        return builder.toString();
     }
 }
