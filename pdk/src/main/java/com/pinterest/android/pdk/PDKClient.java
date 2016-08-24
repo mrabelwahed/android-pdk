@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
@@ -78,6 +80,7 @@ public class PDKClient {
 
     private static final String PINTEREST_PACKAGE = "com.pinterest";
     private static final String PINTEREST_OAUTH_ACTIVITY = "com.pinterest.sdk.PinterestOauthActivity";
+    private static final String PINTEREST_SIGNATURE_HASH = "b6a74dbcb894b0f73d8c485c72eb1247a8f027ca";
 
     private PDKClient() {
 
@@ -419,11 +422,7 @@ public class PDKClient {
     private void initiateLogin(Context c, List<String> permissions) {
         if (pinterestInstalled(_context)) {
             Intent intent = createAuthIntent(_context, _clientId, permissions);
-            if (intent != null) {
-                openPinterestAppForLogin(c, intent);
-            } else {
-                initiateWebLogin(c, permissions);
-            }
+            openPinterestAppForLogin(c, intent, permissions);
         } else {
             initiateWebLogin(c, permissions);
         }
@@ -446,14 +445,14 @@ public class PDKClient {
         }
     }
 
-    private void openPinterestAppForLogin(Context c, Intent intent) {
+    private void openPinterestAppForLogin(Context c, Intent intent, List<String> permissions) {
         try {
             //Utils.log("PDK: starting Pinterest app for auth");
             ((Activity)c).startActivityForResult(intent, PDKCLIENT_REQUEST_CODE);
         } catch (ActivityNotFoundException e) {
             // Ideally this should not happen because intent is not null
-            // initiate web login??
             Utils.loge("PDK: failed to open Pinterest App for login");
+            initiateWebLogin(c, permissions);
             return;
         }
         return;
@@ -508,11 +507,14 @@ public class PDKClient {
 
         boolean installed = false;
         try {
-            PackageInfo info = context.getPackageManager().getPackageInfo(PINTEREST_PACKAGE, 0);
-            if (info != null) {
-                installed = info.versionCode >= 16;
+            PackageInfo info = context.getPackageManager().getPackageInfo(PINTEREST_PACKAGE, PackageManager.GET_SIGNATURES);
+            if (info != null && info.versionCode >= 16) {
                 //Utils.log("PDK versionCode:%s versionName:%s", info.versionCode,
                 //    info.versionName);
+                for (Signature signature : info.signatures) {
+                    String signatureHash = Utils.sha1Hex(signature.toByteArray());
+                    installed = signatureHash.equals(PINTEREST_SIGNATURE_HASH);
+                }
             }
             if (!installed)
                 Utils.log("PDK: Pinterest App not installed or version too low!");
