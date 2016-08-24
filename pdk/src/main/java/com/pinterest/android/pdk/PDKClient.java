@@ -34,8 +34,6 @@ public class PDKClient {
 
     public static final String PDKCLIENT_PERMISSION_READ_PUBLIC = "read_public";
     public static final String PDKCLIENT_PERMISSION_WRITE_PUBLIC = "write_public";
-    public static final String PDKCLIENT_PERMISSION_READ_PRIVATE = "read_private";
-    public static final String PDKCLIENT_PERMISSION_WRITE_PRIVATE = "write_private";
     public static final String PDKCLIENT_PERMISSION_READ_RELATIONSHIPS = "read_relationships";
     public static final String PDKCLIENT_PERMISSION_WRITE_RELATIONSHIPS = "write_relationships";
 
