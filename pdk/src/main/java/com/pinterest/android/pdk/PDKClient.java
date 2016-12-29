@@ -354,7 +354,7 @@ public class PDKClient {
         }
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("name", name);
-        if (Utils.isEmpty(desc)) params.put("description", desc);
+        if (!Utils.isEmpty(desc)) params.put("description", desc);
         postPath(BOARDS, params, callback);
     }
 
