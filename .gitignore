@@ -1,4 +1,3 @@
-.gradle
 .DS_Store
 .settings/
 bin/
@@ -14,5 +13,4 @@ target/
 classes/
 tmp/
 gen-external-apklibs/
-*gradle-wrapper.pro*
-
+.gradle
