@@ -80,7 +80,7 @@ public class MyPinsActivity extends ActionBarActivity {
 
     private void fetchPins() {
         _pinAdapter.setPinList(null);
-        PDKClient.getInstance().getMyPins(PIN_FIELDS, myPinsCallback);
+        PDKClient.Companion.getInstance().getMyPins(PIN_FIELDS, myPinsCallback);
     }
 
     @Override
@@ -118,11 +118,11 @@ public class MyPinsActivity extends ActionBarActivity {
     }
 
     private void deletePin(int position) {
-        PDKClient.getInstance().deletePin(_pinAdapter.getPinList().get(position).getUid(),
+        PDKClient.Companion.getInstance().deletePin(_pinAdapter.getPinList().get(position).getUid(),
             new PDKCallback() {
                 @Override
                 public void onSuccess(PDKResponse response) {
-                    Log.d(getClass().getName(), "Response: " + response.getStatusCode());
+                    Log.d(getClass().getName(), "Response: " + response.getStatus());
                     fetchPins();
                 }
 

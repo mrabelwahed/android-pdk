@@ -45,8 +45,8 @@ public class CreatePinActivity extends ActionBarActivity {
         String pinImageUrl = imageUrl.getText().toString();
         String board = boardId.getText().toString();
         String noteText = note.getText().toString();
-        if (!Utils.isEmpty(noteText) &&!Utils.isEmpty(board) && !Utils.isEmpty(pinImageUrl)) {
-            PDKClient
+        if (!Utils.INSTANCE.isEmpty(noteText) &&!Utils.INSTANCE.isEmpty(board) && !Utils.INSTANCE.isEmpty(pinImageUrl)) {
+            PDKClient.Companion
                 .getInstance().createPin(noteText, board, pinImageUrl, link.getText().toString(), new PDKCallback() {
                 @Override
                 public void onSuccess(PDKResponse response) {

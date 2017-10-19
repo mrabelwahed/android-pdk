@@ -76,7 +76,7 @@ public class MyBoardsActivity extends ActionBarActivity {
 
     private void fetchBoards() {
         _boardsAdapter.setBoardList(null);
-        PDKClient.getInstance().getMyBoards(BOARD_FIELDS, myBoardsCallback);
+        PDKClient.Companion.getInstance().getMyBoards(BOARD_FIELDS, myBoardsCallback);
     }
 
     private void loadNext() {
@@ -127,10 +127,10 @@ public class MyBoardsActivity extends ActionBarActivity {
     }
 
     private void deleteBoard(int position) {
-        PDKClient.getInstance().deleteBoard(_boardsAdapter.getBoardList().get(position).getUid(), new PDKCallback() {
+        PDKClient.Companion.getInstance().deleteBoard(_boardsAdapter.getBoardList().get(position).getUid(), new PDKCallback() {
             @Override
             public void onSuccess(PDKResponse response) {
-                Log.d(getClass().getName(), "Response: " + response.getStatusCode());
+                Log.d(getClass().getName(), "Response: " + response.getStatus());
                 fetchBoards();
             }
 

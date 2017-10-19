@@ -41,8 +41,8 @@ public class CreateBoardActivity extends ActionBarActivity {
 
     private void onSaveBoard() {
         String bName = boardName.getText().toString();
-        if (!Utils.isEmpty(bName)) {
-            PDKClient.getInstance().createBoard(bName, boardDesc.getText().toString(), new PDKCallback() {
+        if (!Utils.INSTANCE.isEmpty(bName)) {
+            PDKClient.Companion.getInstance().createBoard(bName, boardDesc.getText().toString(), new PDKCallback() {
                 @Override
                 public void onSuccess(PDKResponse response) {
                     Log.d(getClass().getName(), response.getData().toString());

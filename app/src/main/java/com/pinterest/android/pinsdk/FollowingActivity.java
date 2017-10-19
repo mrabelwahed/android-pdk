@@ -66,7 +66,7 @@ public class FollowingActivity extends ActionBarActivity {
 
     private void fetchFollowers() {
         _followingAdapter.setFollowingList(null);
-        PDKClient.getInstance().getPath("me/following/users/", myFollowingCallback);
+        PDKClient.Companion.getInstance().getPath("me/following/users/", myFollowingCallback);
     }
 
     private void loadNext() {
@@ -107,7 +107,7 @@ public class FollowingActivity extends ActionBarActivity {
     private void onUnfollowUser(int position) {
         String userId = _followingAdapter.getFollowingList().get(position).getUid();
         String path = "me/following/users/" + userId + "/";
-        PDKClient.getInstance().deletePath(path, new PDKCallback() {
+        PDKClient.Companion.getInstance().deletePath(path, new PDKCallback() {
             @Override
             public void onSuccess(PDKResponse response) {
                 Log.d(getClass().getName(), "Response: " + response.getData().toString());

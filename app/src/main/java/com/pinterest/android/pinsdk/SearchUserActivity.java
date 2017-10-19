@@ -59,11 +59,11 @@ public class SearchUserActivity extends ActionBarActivity {
     }
 
     private void onSearch() {
-        if (!Utils.isEmpty(searchBox.getText().toString())) {
-            PDKClient.getInstance().getUser(searchBox.getText().toString(), USER_FIELDS, new PDKCallback() {
+        if (!Utils.INSTANCE.isEmpty(searchBox.getText().toString())) {
+            PDKClient.Companion.getInstance().getUser(searchBox.getText().toString(), USER_FIELDS, new PDKCallback() {
                     @Override
                     public void onSuccess(PDKResponse response) {
-                        Log.d(getClass().getName(), "Response: " + response.getStatusCode());
+                        Log.d(getClass().getName(), "Response: " + response.getStatus());
                         user = response.getUser();
                         showUser();
                     }
@@ -81,7 +81,7 @@ public class SearchUserActivity extends ActionBarActivity {
         String path = "me/following/users/";
         HashMap<String, String> param = new HashMap<String, String>();
         param.put("user", user.getUid());
-        PDKClient.getInstance().postPath(path, param, new PDKCallback() {
+        PDKClient.Companion.getInstance().postPath(path, param, new PDKCallback() {
             @Override
             public void onSuccess(PDKResponse response) {
                 Log.d(getClass().getName(), "Response: " + response.getData().toString());

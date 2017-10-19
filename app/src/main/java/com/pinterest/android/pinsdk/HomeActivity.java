@@ -87,10 +87,10 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void  getMe() {
-        PDKClient.getInstance().getMe(USER_FIELDS, new PDKCallback() {
+        PDKClient.Companion.getInstance().getMe(USER_FIELDS, new PDKCallback() {
             @Override
             public void onSuccess(PDKResponse response) {
-                if (DEBUG) log(String.format("status: %d", response.getStatusCode()));
+                if (DEBUG) log(String.format("status: %d", response.getStatus()));
                 user = response.getUser();
                 setUser();
             }
@@ -123,7 +123,7 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void  onLogout() {
-        PDKClient.getInstance().logout();
+        PDKClient.Companion.getInstance().logout();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
@@ -135,7 +135,7 @@ public class HomeActivity extends ActionBarActivity {
     }
 
     private void log(String msg) {
-        if (!Utils.isEmpty(msg))
+        if (!Utils.INSTANCE.isEmpty(msg))
             Log.d(getClass().getName(), msg);
     }
 }

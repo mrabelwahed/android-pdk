@@ -29,9 +29,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(this);
-        pdkClient = PDKClient.configureInstance(this, appID);
+        pdkClient = PDKClient.Companion.configureInstance(this, appID);
         pdkClient.onConnect(this);
-        pdkClient.setDebugMode(true);
+        PDKClient.Companion.setDebugMode(true);
     }
 
     @Override
@@ -43,10 +43,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void onLogin() {
         List scopes = new ArrayList<String>();
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_READ_PUBLIC);
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_WRITE_PUBLIC);
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_READ_RELATIONSHIPS);
-        scopes.add(PDKClient.PDKCLIENT_PERMISSION_WRITE_RELATIONSHIPS);
+        scopes.add(PDKClient.Companion.getPDKCLIENT_PERMISSION_READ_PUBLIC());
+        scopes.add(PDKClient.Companion.getPDKCLIENT_PERMISSION_WRITE_PUBLIC());
+        scopes.add(PDKClient.Companion.getPDKCLIENT_PERMISSION_READ_RELATIONSHIPS());
+        scopes.add(PDKClient.Companion.getPDKCLIENT_PERMISSION_WRITE_RELATIONSHIPS());
 
         pdkClient.login(this, scopes, new PDKCallback() {
             @Override

@@ -87,9 +87,9 @@ public class AnyPathActivity extends ActionBarActivity implements
         String path = pathText.getText().toString();
         String fields = fieldsText.getText().toString();
         HashMap params = new HashMap<String, String>();
-        params.put(PDKClient.PDK_QUERY_PARAM_FIELDS, fields);
-        if (!Utils.isEmpty(path)) {
-            PDKClient
+        params.put(PDKClient.Companion.getPDK_QUERY_PARAM_FIELDS(), fields);
+        if (!Utils.INSTANCE.isEmpty(path)) {
+            PDKClient.Companion
                 .getInstance().getPath(path, params, new PDKCallback() {
                 @Override
                 public void onSuccess(PDKResponse response) {
