@@ -16,7 +16,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,8 +85,7 @@ public class PDKClient {
     }
 
     public static PDKClient getInstance() {
-        if (_mInstance == null)
-        {
+        if (_mInstance == null) {
             _mInstance = new PDKClient();
             _requestQueue = getRequestQueue();
         }
@@ -141,9 +139,9 @@ public class PDKClient {
     }
 
     /**
-     *  The oauth Token returned from the server upon authentication. If you store this in your
-     *  app, please be sure to do so securely and be warned that it can expire
-     *  at any time. If the token expires, you will need to re-authenticate and get a new token.
+     * The oauth Token returned from the server upon authentication. If you store this in your
+     * app, please be sure to do so securely and be warned that it can expire
+     * at any time. If the token expires, you will need to re-authenticate and get a new token.
      */
     public String getAccessToken() {
         return _accessToken;
@@ -156,14 +154,16 @@ public class PDKClient {
         saveAccessToken(null);
         saveScopes(null);
     }
-    public void login (final Context context, final List<String> permissions, final PDKCallback callback) {
+
+    public void login(final Context context, final List<String> permissions, final PDKCallback callback) {
         _authCallback = callback;
         if (Utils.isEmpty(permissions)) {
             if (callback != null) callback.onFailure(new PDKException("Scopes cannot be empty"));
             return;
         }
         if (!(context instanceof Activity)) {
-            if (callback != null) callback.onFailure(new PDKException("Please pass Activity context with login request"));
+            if (callback != null)
+                callback.onFailure(new PDKException("Please pass Activity context with login request"));
             return;
         }
         _requestedScopes = new HashSet<String>();
@@ -204,7 +204,8 @@ public class PDKClient {
 
     public void onConnect(Context context) {
         if (!(context instanceof Activity)) {
-            if (_authCallback != null) _authCallback.onFailure(new PDKException("Please pass Activity context with onConnect request"));
+            if (_authCallback != null)
+                _authCallback.onFailure(new PDKException("Please pass Activity context with onConnect request"));
             return;
         }
         Activity activity = (Activity) context;
@@ -273,7 +274,7 @@ public class PDKClient {
     }
 
     public void getMyPins(String fields, PDKCallback callback) {
-        String path =  ME + PINS;
+        String path = ME + PINS;
         getPath(path, getMapWithFields(fields), callback);
     }
 
@@ -314,7 +315,7 @@ public class PDKClient {
             if (callback != null) callback.onFailure(new PDKException("Invalid user name/Id"));
             return;
         }
-        String path =  USER + userId;
+        String path = USER + userId;
         getPath(path, getMapWithFields(fields), callback);
     }
 
@@ -325,7 +326,7 @@ public class PDKClient {
             if (callback != null) callback.onFailure(new PDKException("Invalid board Id"));
             return;
         }
-        String path =  BOARDS + boardId;
+        String path = BOARDS + boardId;
         getPath(path, getMapWithFields(fields), callback);
     }
 
@@ -334,7 +335,7 @@ public class PDKClient {
             if (callback != null) callback.onFailure(new PDKException("Invalid board Id"));
             return;
         }
-        String path =  BOARDS + boardId + "/" + PINS;
+        String path = BOARDS + boardId + "/" + PINS;
         getPath(path, getMapWithFields(fields), callback);
     }
 
@@ -348,7 +349,8 @@ public class PDKClient {
 
     public void createBoard(String name, String desc, PDKCallback callback) {
         if (Utils.isEmpty(name)) {
-            if (callback != null) callback.onFailure(new PDKException("Board name cannot be empty"));
+            if (callback != null)
+                callback.onFailure(new PDKException("Board name cannot be empty"));
             return;
         }
         HashMap<String, String> params = new HashMap<String, String>();
@@ -364,13 +366,14 @@ public class PDKClient {
             if (callback != null) callback.onFailure(new PDKException("Invalid pin Id"));
             return;
         }
-        String path =  PINS + pinId;
+        String path = PINS + pinId;
         getPath(path, getMapWithFields(fields), callback);
     }
 
     public void createPin(String note, String boardId, String imageUrl, String link, PDKCallback callback) {
         if (Utils.isEmpty(note) || Utils.isEmpty(boardId) || Utils.isEmpty(imageUrl)) {
-            if (callback != null) callback.onFailure(new PDKException("Board Id, note, Image cannot be empty"));
+            if (callback != null)
+                callback.onFailure(new PDKException("Board Id, note, Image cannot be empty"));
             return;
         }
         HashMap<String, String> params = new HashMap<String, String>();
@@ -429,13 +432,13 @@ public class PDKClient {
 
     private void initiateWebLogin(Context c, List<String> permissions) {
         try {
-            List paramList = new LinkedList<BasicNameValuePair>();
+            List paramList = new LinkedList<NameValuePair>();
             paramList.add(new NameValuePair("client_id", _clientId));
-            paramList.add(new NameValuePair("scope",  TextUtils.join(",", permissions)));
+            paramList.add(new NameValuePair("scope", TextUtils.join(",", permissions)));
             paramList.add(new NameValuePair("redirect_uri", "pdk" + _clientId + "://"));
             paramList.add(new NameValuePair("response_type", "token"));
 
-            String url =  Utils.getUrlWithQueryParams(PROD_WEB_OAUTH_URL, paramList);
+            String url = Utils.getUrlWithQueryParams(PROD_WEB_OAUTH_URL, paramList);
             Intent oauthIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             c.startActivity(oauthIntent);
 
@@ -447,7 +450,7 @@ public class PDKClient {
     private void openPinterestAppForLogin(Context c, Intent intent, List<String> permissions) {
         try {
             //Utils.log("PDK: starting Pinterest app for auth");
-            ((Activity)c).startActivityForResult(intent, PDKCLIENT_REQUEST_CODE);
+            ((Activity) c).startActivityForResult(intent, PDKCLIENT_REQUEST_CODE);
         } catch (ActivityNotFoundException e) {
             // Ideally this should not happen because intent is not null
             Utils.loge("PDK: failed to open Pinterest App for login");
@@ -459,10 +462,10 @@ public class PDKClient {
 
     private Intent createAuthIntent(Context context, String appId, List<String> permissions) {
         return new Intent()
-            .setClassName(PINTEREST_PACKAGE, PINTEREST_OAUTH_ACTIVITY)
-            .putExtra(PDKCLIENT_EXTRA_APPID, appId)
-            .putExtra(PDKCLIENT_EXTRA_APPNAME, "appName")
-            .putExtra(PDKCLIENT_EXTRA_PERMISSIONS, TextUtils.join(",", permissions));
+                .setClassName(PINTEREST_PACKAGE, PINTEREST_OAUTH_ACTIVITY)
+                .putExtra(PDKCLIENT_EXTRA_APPID, appId)
+                .putExtra(PDKCLIENT_EXTRA_APPNAME, "appName")
+                .putExtra(PDKCLIENT_EXTRA_PERMISSIONS, TextUtils.join(",", permissions));
     }
 
 
@@ -585,7 +588,7 @@ public class PDKClient {
         String appId = "";
         Set<String> appScopes = new HashSet<String>();
         try {
-            JSONObject jsonObject = (JSONObject)obj;
+            JSONObject jsonObject = (JSONObject) obj;
             if (jsonObject.has("app")) {
                 JSONObject appObj = jsonObject.getJSONObject("app");
                 if (appObj.has("id")) {
