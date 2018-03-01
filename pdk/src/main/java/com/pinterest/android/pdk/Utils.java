@@ -1,11 +1,10 @@
 package com.pinterest.android.pdk;
 
+import android.support.v4.util.Pair;
 import android.util.Log;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -16,6 +15,9 @@ import java.util.Map;
 
 public class Utils {
 
+    private static final String PARAMETER_SEPARATOR = "&";
+    private static final String NAME_VALUE_SEPARATOR = "=";
+    private static final  String DEFAULT_CONTENT_CHARSET ="ISO-8859-1";
     private static final String TAG = "PDK";
     private static DateFormat _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -57,7 +59,7 @@ public class Utils {
         return _dateFormat;
     }
 
-    public static String getUrlWithQueryParams(String url, List<NameValuePair> params) {
+    public static String getUrlWithQueryParams(String url, List<Pair> params) {
         if (url == null) {
             return null;
         }
@@ -68,10 +70,37 @@ public class Utils {
             url += "?";
 
         if (params != null && params.size() > 0) {
-            String paramString = URLEncodedUtils.format(params, "utf-8");
+            String paramString = format(params, "utf-8");
             url += paramString;
         }
         return url;
+    }
+
+
+    public static String format (final List <? extends Pair> parameters,
+            final String encoding) {
+        final StringBuilder result = new StringBuilder();
+        for (final Pair parameter : parameters) {
+            final String encodedName = encode(String.valueOf(parameter.first), encoding);
+            final String value = String.valueOf(parameter.second);
+            final String encodedValue = value != null ? encode(value, encoding) : "";
+            if (result.length() > 0)
+                result.append(PARAMETER_SEPARATOR);
+            result.append(encodedName);
+            result.append(NAME_VALUE_SEPARATOR);
+            result.append(encodedValue);
+        }
+        return result.toString();
+    }
+
+
+    private static String encode (final String content, final String encoding) {
+        try {
+            return URLEncoder.encode(content,
+                    encoding != null ? encoding : DEFAULT_CONTENT_CHARSET);
+        } catch (UnsupportedEncodingException problem) {
+            throw new IllegalArgumentException(problem);
+        }
     }
 
     public static String sha1Hex(byte[] byteArray) {
