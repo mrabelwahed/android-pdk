@@ -21,7 +21,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private PDKClient pdkClient;
     Button loginButton;
-    private static final String appID = "YOUR_APP_ID";
+    private static final String appID = "your_app_id";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         pdkClient.login(this, scopes, new PDKCallback() {
             @Override
             public void onSuccess(PDKResponse response) {
+
                 Log.d(getClass().getName(), response.getData().toString());
                 onLoginSuccess();
             }

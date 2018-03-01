@@ -1,6 +1,5 @@
 package com.pinterest.android.pdk;
 
-import android.support.v4.util.Pair;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
@@ -17,7 +16,7 @@ public class Utils {
 
     private static final String PARAMETER_SEPARATOR = "&";
     private static final String NAME_VALUE_SEPARATOR = "=";
-    private static final  String DEFAULT_CONTENT_CHARSET ="ISO-8859-1";
+    private static final String DEFAULT_CONTENT_CHARSET = "ISO-8859-1";
     private static final String TAG = "PDK";
     private static DateFormat _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -36,7 +35,7 @@ public class Utils {
     /**
      * Log errors
      *
-     * @param s base String
+     * @param s      base String
      * @param params Objects to format in
      */
     public static void loge(String s, Object... params) {
@@ -47,7 +46,7 @@ public class Utils {
     /**
      * Log info
      *
-     * @param s base String
+     * @param s      base String
      * @param params Objects to format in
      */
     public static void log(String s, Object... params) {
@@ -59,14 +58,14 @@ public class Utils {
         return _dateFormat;
     }
 
-    public static String getUrlWithQueryParams(String url, List<Pair> params) {
+    public static String getUrlWithQueryParams(String url, List<NameValuePair> params) {
         if (url == null) {
             return null;
         }
 
         url = url.replace(" ", "%20");
 
-        if(!url.endsWith("?"))
+        if (!url.endsWith("?"))
             url += "?";
 
         if (params != null && params.size() > 0) {
@@ -77,12 +76,12 @@ public class Utils {
     }
 
 
-    public static String format (final List <? extends Pair> parameters,
-            final String encoding) {
+    public static String format(final List<? extends NameValuePair> parameters,
+                                final String encoding) {
         final StringBuilder result = new StringBuilder();
-        for (final Pair parameter : parameters) {
-            final String encodedName = encode(String.valueOf(parameter.first), encoding);
-            final String value = String.valueOf(parameter.second);
+        for (final NameValuePair parameter : parameters) {
+            final String encodedName = encode(parameter.getName(), encoding);
+            final String value = parameter.getValue();
             final String encodedValue = value != null ? encode(value, encoding) : "";
             if (result.length() > 0)
                 result.append(PARAMETER_SEPARATOR);
@@ -94,7 +93,7 @@ public class Utils {
     }
 
 
-    private static String encode (final String content, final String encoding) {
+    private static String encode(final String content, final String encoding) {
         try {
             return URLEncoder.encode(content,
                     encoding != null ? encoding : DEFAULT_CONTENT_CHARSET);
